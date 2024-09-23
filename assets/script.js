@@ -28,47 +28,65 @@ let parentFleche = document.getElementById('banner');
 // ajouter la nouvelle balise dans le fichier html
 parentFleche.appendChild(flecheRight);
 
-// meme proseder pour la creation de la flèche gauche
+//  creation de la flèche gauche
 let flecheLeft = document.createElement('img');
 flecheLeft.src = './assets/images/arrow_left.png';
 flecheLeft.alt = 'la flèche gauche';
 flecheLeft.classList.add('arrow', 'arrow_left');
 parentFleche.appendChild(flecheLeft);
 
-// ajout des bullet points
-let spanBulletUn = document.createElement('span');
-spanBulletUn.classList.add('dot');
-let parentBullet = document.querySelector('.dots');
-parentBullet.appendChild(spanBulletUn);
-
-let spanBulletDeux = document.createElement('span');
-spanBulletDeux.classList.add('dot');
-parentBullet.appendChild(spanBulletDeux);
-
-let spanBulletTrois = document.createElement('span');
-spanBulletTrois.classList.add('dot');
-parentBullet.appendChild(spanBulletTrois);
-
-let spanBulletQuatre = document.createElement('span');
-spanBulletQuatre.classList.add('dot');
-parentBullet.appendChild(spanBulletQuatre);
-
-// recuperer tout les span des bullet
-let spanBullet = document.querySelectorAll('.dots span');
-console.log(spanBullet);
-
+// boucle for pour creer les balises span des bullets
+for (let i = 0; i < slides.length; i++) {
+  let spanBullet = document.createElement('span');
+  spanBullet.classList.add('dot');
+  let parentBullet = document.querySelector('.dots');
+  parentBullet.appendChild(spanBullet);
+}
+// VARIABLE
+// recuperer tout les span des bullets
+let spanBullets = document.querySelectorAll('.dots span');
 const arrowLeftClick = document.querySelector('.arrow_left');
-console.log(arrowLeftClick);
-arrowLeftClick.addEventListener('click', function (event) {
-  spanBullet.classList.add('dot_selected');
-  console.log(spanBullet);
-});
-
 const arrowRightClick = document.querySelector('.arrow_right');
-console.log(arrowRightClick);
-arrowRightClick.addEventListener('click', function () {
-  let i = 0;
-  i++;
-  spanBullet[i].classList.add('dot_selected');
-  console.log(spanBullet[i]);
-});
+let slideImg = document.querySelector('#banner img');
+let slideP = document.querySelector('#banner p');
+let i = 0;
+
+// le bullet actif
+function bulletActif() {
+  if (i === 0) {
+    spanBullets[i].classList.add('dot_selected');
+  }
+}
+bulletActif();
+// afficher  au click DROIT
+function tableauSlideRight() {
+  arrowRightClick.addEventListener('click', function () {
+    // enlever le selected du bullet précédent
+    spanBullets[i].classList.remove('dot_selected');
+    i++;
+    // si i depasse 4(nombre de slide) on revient au slide 1
+    if (i > slides.length - 1) {
+      i = 0;
+    }
+    // on change le slide, le bullet (nouveau bullet est selected) et le texte
+    slideImg.src = './assets/images/slideshow/' + slides[i].image;
+    slideP.innerHTML = slides[i].tagLine;
+    spanBullets[i].classList.add('dot_selected');
+  });
+}
+
+tableauSlideRight();
+// affichage au click gauche
+function tableauSlideLeft() {
+  arrowLeftClick.addEventListener('click', function () {
+    spanBullets[i].classList.remove('dot_selected');
+    i--;
+    if (i < 0) {
+      i = slides.length - 1;
+    }
+    slideImg.src = './assets/images/slideshow/' + slides[i].image;
+    slideP.innerHTML = slides[i].tagLine;
+    spanBullets[i].classList.add('dot_selected');
+  });
+}
+tableauSlideLeft();
